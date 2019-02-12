@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FoodProject</string>
+    <string-array name="spinner">
+        <item>Apetizer</item>
+        <item>Main Course</item>
+        <item>Dessert</item>
+    </string-array>
+</resources>

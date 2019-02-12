@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddNewMealActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select meal category"
+        android:textSize="20sp"
+        android:layout_margin="8sp"/>
+
+    <Spinner
+        android:layout_margin="8sp"
+        android:id="@+id/spinner"
+        android:scrollbarSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16sp"
+        android:id="@+id/mealName"
+        android:layout_below="@+id/spinner"
+        android:hint="Enter meal name"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/addPhoto"
+        android:id="@+id/description"
+        android:layout_margin="16sp"
+        android:hint="Enter full description of your meal"
+        android:layout_below="@+id/mealName"/>
+        
+    <ImageButton
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:id="@+id/addPhoto"
+        android:src="@drawable/ic_addphoto"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16sp"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/done"
+        android:text="Done"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16sp"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
