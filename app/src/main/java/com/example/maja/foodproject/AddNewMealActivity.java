@@ -98,7 +98,7 @@ public class AddNewMealActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
 
-       mStorage = FirebaseStorage.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
 
         imageButtonAddPhoto.setOnClickListener(new View.OnClickListener() {
