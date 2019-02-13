@@ -1,5 +1,6 @@
 package com.example.maja.foodproject;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,13 +49,15 @@ public class FoodAdapter extends BaseAdapter {
 
         FoodItem food = foodItems.get(position);
 
+
         holder.title.setText(food.getTitle());
         holder.description.setText(food.getDescription());
+        holder.icon.setImageURI(food.getImageUrl());
 
         return convertView;
     }
 
-    class FoodViewHolder {
+    static class FoodViewHolder {
 
         TextView title;
         ImageView icon;
@@ -64,6 +67,10 @@ public class FoodAdapter extends BaseAdapter {
             title = view.findViewById(R.id.title);
             icon = view.findViewById(R.id.icon);
             description = view.findViewById(R.id.desc);
+        }
+
+        public FoodViewHolder() {
+
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.maja.foodproject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,13 +9,17 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.lang.*;
@@ -29,6 +34,7 @@ public class FoodListActivity extends AppCompatActivity {
     private FoodAdapter customAdapter;
     DatabaseReference databaseReference;
     FirebaseDatabase firebaseDatabase;
+    String foodType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,7 @@ public class FoodListActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
         Intent intent = getIntent();
-        String foodType = intent.getStringExtra("foodType");
+        foodType = intent.getStringExtra("foodType");
         String firebaseString="https://foodproject-8d192.firebaseio.com/";
         String link = firebaseString + foodType;
         mRef = new Firebase(link);
@@ -126,8 +132,24 @@ public class FoodListActivity extends AppCompatActivity {
                     Log.d("value", String.valueOf(childDataSnapshot.child("description").getValue()));
                     Log.d("value", String.valueOf(childDataSnapshot.child("title").getValue()));
 
+                    StorageReference pictureReference = FirebaseStorage.getInstance().getReference("images/");
 
-                    foodItems.add(new FoodItem(title,description,"https://www.designindaba.com/sites/default/files/styles/scaledlarge/public/node/news/23566/sonic-burger.jpg?itok=zGk5pjcI"));
+                    pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            FoodAdapter.FoodViewHolder holder = new FoodAdapter.FoodViewHolder();
+                            String noviUrl = uri.toString();
+                            Glide.with(getApplicationContext())
+                                    .load(noviUrl)
+                                    .into(holder.icon);
+
+                            //TODO : stavit sliku u imageview od listview-a
+
+                        }
+                    });
+
+                    Uri uri = null;
+                    foodItems.add(new FoodItem(title,description, uri));
                     customAdapter=new FoodAdapter(foodItems);
                     mListView.setAdapter(customAdapter);
 

@@ -44,6 +44,8 @@ public class SelectActivity extends AppCompatActivity {
         textView =  findViewById(R.id.email_sign_out_button);
         fab=findViewById(R.id.fab);
         mAuth = FirebaseAuth.getInstance();
+        Intent intent = getIntent();
+
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

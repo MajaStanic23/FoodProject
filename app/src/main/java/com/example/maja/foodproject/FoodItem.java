@@ -1,11 +1,13 @@
 package com.example.maja.foodproject;
 
+import android.net.Uri;
+
 class FoodItem {
     private String title;
     private String description;
-    private String imageUrl;
+    private Uri imageUrl;
 
-    public FoodItem(String title, String description, String imageUrl) {
+    public FoodItem(String title, String description, Uri imageUrl) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -27,11 +29,11 @@ class FoodItem {
         this.description = description;
     }
 
-    public String getImageUrl() {
+    public Uri getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(Uri imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

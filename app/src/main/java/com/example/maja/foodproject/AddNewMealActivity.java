@@ -1,9 +1,11 @@
 package com.example.maja.foodproject;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -49,6 +51,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Random;
 
 public class AddNewMealActivity extends AppCompatActivity {
     Button buttonDone;
@@ -69,16 +73,11 @@ public class AddNewMealActivity extends AppCompatActivity {
     ArrayAdapter<CharSequence> arrayAdapter;
     StorageReference mStorageRef;
 
-    private DatabaseReference mDatabase;
-
-
-
 
 
     private static final int CAMERA_REQUEST_CODE=1;
     private int GALLERY = 1;
     private StorageReference mStorage;
-
 
 
     @Override
@@ -113,6 +112,7 @@ public class AddNewMealActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //startPosting();
+                generateRandomNumber();
                 createNewMeal();
                 startPosting();
             }
@@ -132,8 +132,11 @@ public class AddNewMealActivity extends AppCompatActivity {
         firebaseReference = new Firebase(link);
 
         if (info1 != null && info2 != null && !info1.equals("") && !info2.equals("")) {
-            firebaseReference.child(info1).child("title").setValue(info1);
-            firebaseReference.child(info1).child("description").setValue(info2);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String mealName = prefs.getString("randomID", "meal"); //no id: default value
+
+            firebaseReference.child(mealName).child("title").setValue(info1);
+            firebaseReference.child(mealName).child("description").setValue(info2);
             //firebaseReference = FirebaseDatabase.getInstance().getReference().child("All Categories").child(text);
 
             firebaseReference.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
@@ -203,24 +206,28 @@ public class AddNewMealActivity extends AppCompatActivity {
 
         if (mImageUri !=null){
 
-            StorageReference filepath = mStorageRef.child("images").child(mImageUri.getLastPathSegment());
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String mealName = prefs.getString("randomID", "meal"); //no id: default value
+
+            StorageReference filepath = mStorageRef.child("images").child(mealName);
 
 
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl();
+                    //Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl();
+                    //DatabaseReference newPost = databaseReference.push();//push kreira uniq random id
+                    //newPost.child("images").setValue(downloadUrl.toString());
 
-                    DatabaseReference newPost = mDatabase.push();//push kreira uniq random id
-
-
-                    newPost.child("images").setValue(downloadUrl.toString());
+                    Toast.makeText(getApplicationContext(), databaseReference.push().toString(), Toast.LENGTH_LONG).show();
+                    Log.d("link", databaseReference.push().toString());
 
                 }
             });
         }
     }
+
 
     ////////////////////////
     @Override
@@ -234,6 +241,8 @@ public class AddNewMealActivity extends AppCompatActivity {
             if (data != null) {
                 mImageUri = data.getData();
                 imageButtonAddPhoto.setImageURI(mImageUri);
+                Log.d("imageURI", mImageUri.toString());
+                Toast.makeText(getApplicationContext(), mImageUri.toString(), Toast.LENGTH_LONG).show();
             }
 
         } else if (requestCode == CAMERA_REQUEST_CODE && requestCode==RESULT_OK) {
@@ -249,6 +258,30 @@ public class AddNewMealActivity extends AppCompatActivity {
                 }
             });
         }*/
+        }
     }
-}
+
+
+    public String generateRandomNumber(){
+
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+
+        Log.d("generatedString", generatedString);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("randomID", generatedString);
+        editor.apply();
+
+        return generatedString;
+    }
 }
