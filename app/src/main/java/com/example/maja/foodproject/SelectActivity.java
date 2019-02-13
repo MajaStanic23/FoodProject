@@ -58,7 +58,7 @@ public class SelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String foodType = "apetizer";
+                String foodType = "Apetizer";
                 Intent intent= new Intent ( SelectActivity.this, FoodListActivity.class);
                 intent.putExtra("foodType", foodType);
                 startActivity(intent);
@@ -67,7 +67,7 @@ public class SelectActivity extends AppCompatActivity {
         btnMainCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String foodType = "main";
+                String foodType = "Main Course";
                 Intent intent= new Intent ( SelectActivity.this, FoodListActivity.class);
                 intent.putExtra("foodType", foodType);
                 startActivity(intent);
@@ -76,7 +76,7 @@ public class SelectActivity extends AppCompatActivity {
         btnDessert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String foodType = "dessert";
+                String foodType = "Dessert";
                 Intent intent= new Intent ( SelectActivity.this, FoodListActivity.class);
                 intent.putExtra("foodType", foodType);
                 startActivity(intent);

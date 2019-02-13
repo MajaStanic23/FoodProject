@@ -3,11 +3,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-
+import android.support.v4.app.DialogFragment; import com.squareup.picasso.Picasso;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,8 +43,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class AddNewMealActivity extends AppCompatActivity {
     Button buttonDone;
@@ -54,16 +61,25 @@ public class AddNewMealActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     Firebase firebaseReference;
     StorageReference storageReference;
-    ImageView imageView;
-    private Uri imageUri;
-    private Button btn, mSubmitBtn;
-    private ImageView imageview;
-    private static final int GALLERY = 1, CAMERA = 1;
+
+    private Uri mImageUri;
+
+
 
     ArrayAdapter<CharSequence> arrayAdapter;
     StorageReference mStorageRef;
+
     private DatabaseReference mDatabase;
-    FirebaseAuth firebaseAuth;
+
+
+
+
+
+    private static final int CAMERA_REQUEST_CODE=1;
+    private int GALLERY = 1;
+    private StorageReference mStorage;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +99,7 @@ public class AddNewMealActivity extends AppCompatActivity {
         Firebase.setAndroidContext(this);
 
 
-        storageReference = FirebaseStorage.getInstance().getReference();
+       mStorage = FirebaseStorage.getInstance().getReference();
 
 
         imageButtonAddPhoto.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +114,7 @@ public class AddNewMealActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //startPosting();
                 createNewMeal();
+                startPosting();
             }
         });
 
@@ -151,7 +168,7 @@ public class AddNewMealActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                choosePhotoFromGallary();
+                                choosePhotoFromGallery();
                                 break;
                             case 1:
                                 takePhotoFromCamera();
@@ -161,53 +178,77 @@ public class AddNewMealActivity extends AppCompatActivity {
                 });
         pictureDialog.show();
     }
-
-    public void choosePhotoFromGallary() {
+    public void choosePhotoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(galleryIntent, GALLERY);
-
     }
 
     private void takePhotoFromCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File file = new File(Environment.getExternalStorageDirectory()
+                + "/imgDirectory", "imgName"+ ".png");
+
+       mImageUri= Uri.fromFile(file);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);*/
+
+
     }
 
+    ////////////////////////////
+    private void startPosting(){
+
+        if (mImageUri !=null){
+
+            StorageReference filepath = mStorageRef.child("images").child(mImageUri.getLastPathSegment());
 
 
+            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl();
+
+                    DatabaseReference newPost = mDatabase.push();//push kreira uniq random id
+
+
+                    newPost.child("images").setValue(downloadUrl.toString());
+
+                }
+            });
+        }
+    }
+
+    ////////////////////////
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==GALLERY){
-            if(data!=null){
-                imageUri=data.getData();
-                imageButtonAddPhoto.setImageURI(imageUri);
-                uploadImageToFirebase();
-
-            }
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
         }
+        if (requestCode == GALLERY) {
+            if (data != null) {
+                mImageUri = data.getData();
+                imageButtonAddPhoto.setImageURI(mImageUri);
+            }
 
-    }
-    private void uploadImageToFirebase(){
-        final StorageReference pictureReference= FirebaseStorage.getInstance().getReference("images"+"123");
-        if(imageUri != null){
-            pictureReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        } else if (requestCode == CAMERA_REQUEST_CODE && requestCode==RESULT_OK) {
+/*
+            if (data != null) {
+            mImageUri = data.getData();
+            imageButtonAddPhoto.setImageURI(mImageUri);
+            StorageReference filePath=mStorage.child("photos").child(mImageUri.getLastPathSegment());
+            filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(AddNewMealActivity.this,"slika je uploadana", Toast.LENGTH_LONG).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(AddNewMealActivity.this,"greska, nije uploadano", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(AddNewMealActivity.this, "Uspjesno",Toast.LENGTH_LONG).show();
                 }
             });
-
-        }
-
+        }*/
     }
+}
 }
