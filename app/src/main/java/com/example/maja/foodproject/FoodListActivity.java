@@ -63,62 +63,11 @@ public class FoodListActivity extends AppCompatActivity {
 
         populateString();
 
-        //customAdapter=new FoodAdapter(foodItems);
-        //mListView.setAdapter(customAdapter);
 
-
-        //arrayAdapter = new ArrayAdapter<String>(this,R.layout.list_item,R.id.title, foodList);
-
-
-        //mListView.setAdapter(arrayAdapter);
-
-        /*mRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String value = dataSnapshot.getValue(String.class);
-                foodList.add(value);
-
-
-
-
-                //arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-            }
-
-        });
-*/
-
-//        mRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for(DataSnapshot ds: dataSnapshot.getChildren()) {
-//                    customAdapter = ds.getValue(CustomAdapter.class);
-//                    foodList.add(customAdapter.getTitle());
-//                }
-//                mListView.setAdapter(arrayAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
     }
 
 
-    private void populateString(){
+    private void populateString() {
 
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -129,28 +78,13 @@ public class FoodListActivity extends AppCompatActivity {
                     Log.d("key", childDataSnapshot.getKey());
                     String description = String.valueOf(childDataSnapshot.child("description").getValue());
                     String title = String.valueOf(childDataSnapshot.child("title").getValue());
+                    String pictureUrl = String.valueOf(childDataSnapshot.child("pictureUrl").getValue());
                     Log.d("value", String.valueOf(childDataSnapshot.child("description").getValue()));
                     Log.d("value", String.valueOf(childDataSnapshot.child("title").getValue()));
 
-                    StorageReference pictureReference = FirebaseStorage.getInstance().getReference("images/");
-
-                    pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            FoodAdapter.FoodViewHolder holder = new FoodAdapter.FoodViewHolder();
-                            String noviUrl = uri.toString();
-                            Glide.with(getApplicationContext())
-                                    .load(noviUrl)
-                                    .into(holder.icon);
-
-                            //TODO : stavit sliku u imageview od listview-a
-
-                        }
-                    });
-
-                    Uri uri = null;
-                    foodItems.add(new FoodItem(title,description, uri));
-                    customAdapter=new FoodAdapter(foodItems);
+                    String uri = null;
+                    foodItems.add(new FoodItem(title, description, pictureUrl));
+                    customAdapter = new FoodAdapter(foodItems);
                     mListView.setAdapter(customAdapter);
 
                 }
@@ -163,47 +97,4 @@ public class FoodListActivity extends AppCompatActivity {
         });
 
 
-        /*mRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                String title = dataSnapshot.getValue(String.class);
-                List<FoodItem> foodItems = new ArrayList<FoodItem>();
-                foodItems.add(new FoodItem(title,title,"https://www.designindaba.com/sites/default/files/styles/scaledlarge/public/node/news/23566/sonic-burger.jpg?itok=zGk5pjcI"));
-                customAdapter=new FoodAdapter(foodItems);
-                mListView.setAdapter(customAdapter);
-
-                *//*for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    String value = ds.getValue(String.class);
-                    List<FoodItem> foodItems = new ArrayList<FoodItem>();
-                    foodItems.add(new FoodItem(value,value,"https://www.designindaba.com/sites/default/files/styles/scaledlarge/public/node/news/23566/sonic-burger.jpg?itok=zGk5pjcI"));
-                    customAdapter=new FoodAdapter(foodItems);
-                    mListView.setAdapter(customAdapter);
-                }
-*//*
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });*/
-    }
-}
+    }}

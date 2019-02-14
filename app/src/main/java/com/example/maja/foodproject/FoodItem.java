@@ -5,9 +5,9 @@ import android.net.Uri;
 class FoodItem {
     private String title;
     private String description;
-    private Uri imageUrl;
+    private String imageUrl;
 
-    public FoodItem(String title, String description, Uri imageUrl) {
+    public FoodItem(String title, String description, String imageUrl) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -29,11 +29,11 @@ class FoodItem {
         this.description = description;
     }
 
-    public Uri getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(Uri imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

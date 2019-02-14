@@ -78,6 +78,7 @@ public class AddNewMealActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE=1;
     private int GALLERY = 1;
     private StorageReference mStorage;
+    static String pictures = "";
 
 
     @Override
@@ -137,6 +138,7 @@ public class AddNewMealActivity extends AppCompatActivity {
 
             firebaseReference.child(mealName).child("title").setValue(info1);
             firebaseReference.child(mealName).child("description").setValue(info2);
+            //firebaseReference.child(mealName).child("pictureUrl").setValue(pictures);
             //firebaseReference = FirebaseDatabase.getInstance().getReference().child("All Categories").child(text);
 
             firebaseReference.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
@@ -209,7 +211,7 @@ public class AddNewMealActivity extends AppCompatActivity {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String mealName = prefs.getString("randomID", "meal"); //no id: default value
 
-            StorageReference filepath = mStorageRef.child("images").child(mealName);
+            final StorageReference filepath = mStorageRef.child("images").child(mealName);
 
 
             filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -219,7 +221,18 @@ public class AddNewMealActivity extends AppCompatActivity {
                     //Task<Uri> downloadUrl = taskSnapshot.getStorage().getDownloadUrl();
                     //DatabaseReference newPost = databaseReference.push();//push kreira uniq random id
                     //newPost.child("images").setValue(downloadUrl.toString());
+                    filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                            Log.d("URIURI", uri.toString());
+                            pictures = uri.toString();
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            String mealName = prefs.getString("randomID", "meal"); //no id: default value
+                            firebaseReference.child(mealName).child("pictureUrl").setValue(pictures);
 
+                        }
+                    });
                     Toast.makeText(getApplicationContext(), databaseReference.push().toString(), Toast.LENGTH_LONG).show();
                     Log.d("link", databaseReference.push().toString());
 

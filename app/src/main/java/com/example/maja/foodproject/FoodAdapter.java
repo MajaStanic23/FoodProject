@@ -1,5 +1,6 @@
 package com.example.maja.foodproject;
 
+import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +9,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.storage.StorageReference;
+
 import java.util.List;
 
 public class FoodAdapter extends BaseAdapter {
 
     List<FoodItem> foodItems;
+    StorageReference mStorageRef;
+
 
     public FoodAdapter(List<FoodItem> foodItems) {
         this.foodItems = foodItems;
@@ -38,6 +43,7 @@ public class FoodAdapter extends BaseAdapter {
 
         FoodViewHolder holder = null;
 
+
         if(convertView == null){
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_food, parent, false);
@@ -52,8 +58,17 @@ public class FoodAdapter extends BaseAdapter {
 
         holder.title.setText(food.getTitle());
         holder.description.setText(food.getDescription());
-        holder.icon.setImageURI(food.getImageUrl());
+        //holder.icon.setImageURI(food.getImageUrl());
 
+
+        String url="https://missemilysbedandbiscuit.com/images/dog7.jpg";
+
+//        final StorageReference filepath = mStorageRef.child("imagenamess").child("");
+
+
+        FoodViewHolder foodViewHolder=new FoodViewHolder(convertView);
+
+        PicassoClient.download(food.getImageUrl(),foodViewHolder.icon);
         return convertView;
     }
 
@@ -74,33 +89,3 @@ public class FoodAdapter extends BaseAdapter {
         }
     }
 }
-
-//public class CustomAdapter {
-//    private  String title;
-//    private String description;
-//
-//    public CustomAdapter() {
-//
-//    }
-//
-//    public CustomAdapter(String title, String description) {
-//        this.title = title;
-//        this.description = description;
-//    }
-//
-//    public String getTitle() {
-//        return title;
-//    }
-//
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//}
