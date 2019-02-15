@@ -27,7 +27,6 @@ public class SelectActivity extends AppCompatActivity {
    private ImageButton  mAdd;
    private  Button btnAppetizer, btnMainCourse, btnDessert;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private TextView textView;
     FloatingActionButton fab;
 

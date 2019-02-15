@@ -19,7 +19,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText mEmail, mPassword, mName;
     private Button  btnRegistration;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
 
     @Override

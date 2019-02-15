@@ -64,7 +64,7 @@ public class AddNewMealActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     Firebase firebaseReference;
-    StorageReference storageReference;
+
 
     private Uri mImageUri;
 
@@ -138,7 +138,7 @@ public class AddNewMealActivity extends AppCompatActivity {
 
             firebaseReference.child(mealName).child("title").setValue(info1);
             firebaseReference.child(mealName).child("description").setValue(info2);
-            
+
             firebaseReference.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
                 @Override
                 public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {

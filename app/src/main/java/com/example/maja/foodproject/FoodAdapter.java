@@ -8,14 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 public class FoodAdapter extends BaseAdapter {
 
     List<FoodItem> foodItems;
-    StorageReference mStorageRef;
+
 
 
     public FoodAdapter(List<FoodItem> foodItems) {
@@ -62,7 +61,7 @@ public class FoodAdapter extends BaseAdapter {
 
         String url="https://missemilysbedandbiscuit.com/images/dog7.jpg";
 
-//        final StorageReference filepath = mStorageRef.child("imagenamess").child("");
+
 
 
         FoodViewHolder foodViewHolder=new FoodViewHolder(convertView);
