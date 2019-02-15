@@ -138,9 +138,7 @@ public class AddNewMealActivity extends AppCompatActivity {
 
             firebaseReference.child(mealName).child("title").setValue(info1);
             firebaseReference.child(mealName).child("description").setValue(info2);
-            //firebaseReference.child(mealName).child("pictureUrl").setValue(pictures);
-            //firebaseReference = FirebaseDatabase.getInstance().getReference().child("All Categories").child(text);
-
+            
             firebaseReference.addListenerForSingleValueEvent(new com.firebase.client.ValueEventListener() {
                 @Override
                 public void onDataChange(com.firebase.client.DataSnapshot dataSnapshot) {

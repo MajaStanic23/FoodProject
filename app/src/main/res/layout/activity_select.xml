@@ -8,13 +8,17 @@
     tools:context=".SelectActivity">
 
 
-    <ImageButton
+    <TextView
 
         android:id="@+id/profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:scaleType="centerInside"
+        android:text="Favourite meals"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginBottom="16sp"
         android:src="@drawable/profile" />
 
     <TextView

@@ -23,8 +23,8 @@ import android.widget.Toast;
 import android.view.View;
 
 public class SelectActivity extends AppCompatActivity {
-   private TextView mCategory;
-   private ImageButton mProfile, mAdd;
+   private TextView mCategory,profile;
+   private ImageButton  mAdd;
    private  Button btnAppetizer, btnMainCourse, btnDessert;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -36,7 +36,7 @@ public class SelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select);
         mCategory = findViewById(R.id.category);
-        mProfile=(ImageButton) findViewById(R.id.profile);
+        profile=findViewById(R.id.profile);
         mAdd=(ImageButton) findViewById(R.id.add);
         btnAppetizer=(Button) findViewById(R.id.appetizer);
         btnMainCourse=(Button) findViewById(R.id.mainCourse);
@@ -91,7 +91,14 @@ public class SelectActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // FoodList je za listu koja je ista ko prije samo za lajkove
+                Intent intent= new Intent( SelectActivity.this, FoodListActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }
